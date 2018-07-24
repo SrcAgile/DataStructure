@@ -60,9 +60,11 @@ bool     IsDLinkListEmpty(DLinkList dlist){
 	return false;
 }
 bool     InsertDLinkList(DLinkList dlist,int location,ElemType data){
-	if(location<1||location>GetDLinkListLength(dlist)+1)
+if(location<1||location>GetDLinkListLength(dlist)+1)
 		return false;
-	DLinkList dlook = dlist->next;//和linklist不一样,不需要考虑第一个结点
+	/*old codes
+	
+	 DLinkList dlook = dlist->next;//和linklist不一样,不需要考虑第一个结点
 	DLinkList new = InitDLinkList();
 	new->data = data;
 	if(!dlook){
@@ -78,6 +80,16 @@ bool     InsertDLinkList(DLinkList dlist,int location,ElemType data){
 		new->prior = pre;
 		pre->next = new;
 	}
+	*/
+	//new code
+	DLinkList dlook = dlist;
+	DLinkList new = InitDLinkList();
+	new->data = data;
+	for(int i=1;i<location;dlook=dlook->next,i++);
+	new->next = dlook->next;
+	if(dlook->next) dlook->next->prior = new;//针对尾部插入不使用此行代码
+	new->prior = dlook;
+	dlook->next = new;
 	return true;
 }
 bool     DeleteDLinkList(DLinkList dlist,int location,ElemType *data){
